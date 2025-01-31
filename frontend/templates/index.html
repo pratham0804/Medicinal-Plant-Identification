@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Plant Classifier</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style1.css') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌿</text></svg>">
+  <style>
+    /* Global Styles */
+  </style>
+</head>
+<body>
+  <!-- <img src="../images/pf-s80-green-pat-01a.jpg" alt="Image"> -->
+  <div class="container" >
+    <h1>Upload a Plant Image</h1>
+    <input type="file" id="imageInput" accept="image/*">
+    <!-- <button id="uploadButton" onclick="goToPlantInfo()">View Plant Info</button> -->
+  </div>
+
+  <script>// script.js
+    // Function to store the uploaded image in local storage and navigate to the plant info page
+    function goToPlantInfo() {
+      const imageInput = document.getElementById('imageInput').files[0];
+      if (imageInput) {
+        const reader = new FileReader();
+        reader.onload = function () {
+          localStorage.setItem('uploadedImage', reader.result);
+          window.location.href = '{{ url_for("predict_page") }}';
+        };
+        reader.readAsDataURL(imageInput);
+      } else {
+        alert('Please upload an image first.');
+      }
+    }
+    
+    // Function to display the uploaded image on the plant info page
+    window.onload = function () {
+      const plantImage = document.getElementById('plantImage');
+      if (plantImage) {
+        const storedImage = localStorage.getItem('uploadedImage');
+        if (storedImage) {
+          plantImage.src = storedImage;
+        }
+      }
+    };
+  </script>
+  <script src="{{ url_for('static', filename='js/index.js') }}"></script>
+</body>
+</html>

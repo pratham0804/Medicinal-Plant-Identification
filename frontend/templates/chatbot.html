@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PlantBot - Your Plant Expert</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/chatbot.css') }}">
+</head>
+<body>
+    <!-- Hero Section -->
+    <div id="hero">
+        <div class="container">
+            <div id="hero-section">
+                <h1>PlantBot <i class="bi bi-flower1"></i></h1>
+                <p>Your Personal Plant Expert Assistant</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="chat-container">
+            <!-- Bot Info Card -->
+            <div class="bot-info">
+                <div class="bot-avatar">
+                    <i class="bi bi-robot"></i>
+                </div>
+                <div class="bot-status">
+                    <h3>PlantBot</h3>
+                    <span class="status-indicator">Online</span>
+                </div>
+            </div>
+
+            <!-- Chat Messages -->
+            <div class="chat-messages" id="chatMessages">
+                <!-- Welcome Message -->
+                <div class="message bot-message animate-message">
+                    <div class="message-content">
+                        <p>Hello! 👋 I'm PlantBot, your plant expert assistant. I can help you with:</p>
+                        <ul>
+                            <li>Plant care tips and advice</li>
+                            <li>Plant identification help</li>
+                            <li>Growing and maintenance guidance</li>
+                            <li>Plant disease diagnosis</li>
+                            <li>General plant-related questions</li>
+                        </ul>
+                        <p>What would you like to know about plants?</p>
+                    </div>
+                    <div class="message-time">Just now</div>
+                </div>
+            </div>
+
+            <!-- Suggested Questions -->
+            <div class="suggested-questions">
+                <button onclick="askQuestion('What are some easy-to-grow indoor plants?')">Easy indoor plants?</button>
+                <button onclick="askQuestion('How often should I water my plants?')">Watering tips?</button>
+                <button onclick="askQuestion('Common plant diseases?')">Plant diseases?</button>
+                <button onclick="askQuestion('Best plants for air purification?')">Air purifying plants?</button>
+            </div>
+
+            <!-- Chat Input -->
+            <div class="chat-input">
+                <div class="input-group">
+                    <textarea 
+                        id="userInput" 
+                        placeholder="Ask me anything about plants..." 
+                        rows="1"
+                        oninput="autoResize(this)"
+                    ></textarea>
+                    <button id="sendButton" onclick="sendMessage()">
+                        <i class="bi bi-send-fill"></i>
+                    </button>
+                </div>
+                <div class="typing-indicator" id="typingIndicator">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/chatbot.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html> 

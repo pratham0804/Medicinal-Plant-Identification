@@ -1,0 +1,378 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', Arial, sans-serif;
+}
+
+body {
+  background-image: url('/static/images/pf-s80-green-pat-01a.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.container {
+  background: rgba(255, 255, 255, 0.9);
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  text-align: center;
+}
+
+h1 {
+  color: rgb(4, 89, 4);
+  margin-bottom: 30px;
+  font-family: cursive;
+}
+
+input {
+  padding: 20px 20px;
+  border: 2px solid rgb(4, 89, 4);
+  font-family: cursive;
+  font-size: 14px;
+  color: white;
+}
+
+#imageInput, #uploadButton {
+  margin: 10px;
+  background-color: rgb(4, 89, 4);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+#imageInput:hover {
+  background-color: rgb(6, 116, 6);
+}
+
+button {
+  padding: 10px 20px;
+  background-color: #4a90e2;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* Plant Info Page */
+.plant-info {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  text-align: left;
+}
+
+.plant-info img {
+  width: 150px;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.info h2 {
+  color: #38a169;
+  margin-bottom: 10px;
+}
+
+#imageInput {
+  padding: 10px;
+  margin: 20px 0;
+  border: 2px dashed #2c5a2e;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+#imageInput:hover {
+  border-color: #1a3c1b;
+  background-color: rgba(44, 90, 46, 0.1);
+}
+
+/* Upload Section */
+.upload-section {
+  width: 100%;
+  max-width: 800px;
+  padding: 40px;
+  margin: -100px auto 0;
+  position: relative;
+  z-index: 2;
+}
+
+.upload-container {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20px;
+  padding: 40px;
+  box-shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.upload-container:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 40px rgba(31, 38, 135, 0.2);
+}
+
+.upload-icon {
+  width: 80px;
+  height: 80px;
+  background: rgba(46, 204, 113, 0.1);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+  transition: all 0.3s ease;
+}
+
+.upload-icon i {
+  font-size: 32px;
+  color: #2ecc71;
+  transition: all 0.3s ease;
+}
+
+.upload-container:hover .upload-icon {
+  transform: scale(1.1) rotate(5deg);
+  background: rgba(46, 204, 113, 0.2);
+}
+
+.upload-container:hover .upload-icon i {
+  transform: scale(1.1);
+}
+
+.upload-text {
+  margin-bottom: 30px;
+}
+
+.upload-text h2 {
+  font-size: 24px;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.upload-text p {
+  color: #666;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+/* File Input */
+.file-input-container {
+  position: relative;
+  margin: 20px auto;
+  width: 100%;
+  max-width: 400px;
+}
+
+.file-input {
+  display: none;
+}
+
+.file-label {
+  display: inline-block;
+  padding: 15px 30px;
+  background: linear-gradient(135deg, #2ecc71, #27ae60);
+  color: white;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-weight: 500;
+  box-shadow: 0 4px 15px rgba(46, 204, 113, 0.2);
+}
+
+.file-label:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(46, 204, 113, 0.3);
+}
+
+.file-label i {
+  margin-right: 8px;
+  transition: transform 0.3s ease;
+}
+
+.file-label:hover i {
+  transform: translateY(-2px);
+}
+
+/* Preview Section */
+.preview-section {
+  margin: 30px auto;
+  max-width: 400px;
+  display: none;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.3s ease;
+}
+
+.preview-section.show {
+  display: block;
+  animation: slideInUp 0.5s ease forwards;
+}
+
+.preview-container {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  margin: 0 auto 20px;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.preview-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.preview-container:hover .preview-image {
+  transform: scale(1.05);
+}
+
+.submit-btn {
+  padding: 12px 30px;
+  background: linear-gradient(135deg, #2ecc71, #27ae60);
+  color: white;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 15px rgba(46, 204, 113, 0.2);
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.submit-btn.show {
+  opacity: 1;
+  transform: translateY(0);
+  animation: fadeInUp 0.5s ease forwards;
+}
+
+.submit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(46, 204, 113, 0.3);
+}
+
+.submit-btn i {
+  margin-left: 8px;
+  transition: transform 0.3s ease;
+}
+
+.submit-btn:hover i {
+  transform: translateX(5px);
+}
+
+/* Loading Animation */
+.loading {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.9);
+  z-index: 1000;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.loading.show {
+  display: flex;
+  animation: fadeIn 0.3s ease forwards;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid rgba(46, 204, 113, 0.1);
+  border-left-color: #2ecc71;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+/* Animations */
+@keyframes slideInUp {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes gradientFlow {
+  0% { opacity: 0.6; }
+  50% { opacity: 0.8; }
+  100% { opacity: 0.6; }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .hero-content h1 {
+    font-size: 36px;
+  }
+  
+  .upload-container {
+    margin: 0 20px;
+    padding: 30px;
+  }
+  
+  .upload-section {
+    padding: 40px 20px;
+  }
+  
+  .file-input-container {
+    max-width: 100%;
+  }
+  
+  .preview-section {
+    max-width: 100%;
+  }
+  
+  .upload-icon {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .upload-icon i {
+    font-size: 24px;
+  }
+}
