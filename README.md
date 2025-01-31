@@ -32,8 +32,8 @@ A web-based application that uses machine learning to identify medicinal plants 
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/Identification-of-Medical-Plant-using-Machine-Learning.git
-cd Identification-of-Medical-Plant-using-Machine-Learning
+git clone https://github.com/pratham0804/Medicinal-Plant-Identification.git
+cd Medicinal-Plant-Identification
 ```
 
 2. Create a virtual environment and activate it:
@@ -91,4 +91,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - Thanks to all contributors who helped in building this project
 - Special thanks to the plant database sources
-- Image dataset contributors 
+- Image dataset contributors
