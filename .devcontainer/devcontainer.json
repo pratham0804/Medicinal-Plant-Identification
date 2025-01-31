@@ -1,0 +1,20 @@
+{
+    "name": "Medical Plant Identification",
+    "image": "mcr.microsoft.com/devcontainers/python:3.9",
+    "forwardPorts": [5000],
+    "postCreateCommand": "pip install -r requirements.txt",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-python.python",
+                "ms-python.vscode-pylance",
+                "ms-toolsai.jupyter",
+                "ms-toolsai.jupyter-keymap",
+                "ms-toolsai.jupyter-renderers"
+            ]
+        }
+    },
+    "features": {
+        "ghcr.io/devcontainers/features/python:1": {}
+    }
+} 

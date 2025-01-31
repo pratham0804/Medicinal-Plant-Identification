@@ -28,7 +28,19 @@ A web-based application that uses machine learning to identify medicinal plants 
   - Machine Learning model for plant classification
   - SQLite database for plant information
 
-## Installation
+## Running in GitHub Codespaces
+
+1. Click the "Code" button on the repository
+2. Select "Create codespace on main"
+3. Wait for the codespace to be created and initialized
+4. Once ready, open a terminal and run:
+```bash
+python app.py
+```
+5. Click the "Open in Browser" button when it appears
+6. The application will open in a new tab
+
+## Local Installation
 
 1. Clone the repository:
 ```bash
