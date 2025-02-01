@@ -25,21 +25,19 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="slider-container">
+                        <button class="arrow left-arrow" onclick="changeSlide(-1)">&#10094;</button>
                         <div class="slider">
-                            {% if plant_images %}
-                                {% for image in plant_images %}
-                                    <div class="slide">
-                                        <img src="{{ url_for('static', filename=image) }}" alt="Plant Image {{ loop.index }}">
-                                    </div>
-                                {% endfor %}
-                            {% else %}
-                                <div class="slide">
-                                    <img src="{{ url_for('static', filename='images/default.jpg') }}" alt="Default Plant Image">
-                                </div>
-                            {% endif %}
+                            <div class="slide active">
+                                <img src="{{ url_for('static', filename='display-images/' + prediction + '/image1.jpg') if prediction else url_for('static', filename='images/default.jpg') }}" alt="Plant Image 1">
+                            </div>
+                            <div class="slide">
+                                <img src="{{ url_for('static', filename='display-images/' + prediction + '/image2.jpg') if prediction else url_for('static', filename='images/default.jpg') }}" alt="Plant Image 2">
+                            </div>
+                            <div class="slide">
+                                <img src="{{ url_for('static', filename='display-images/' + prediction + '/image3.jpg') if prediction else url_for('static', filename='images/default.jpg') }}" alt="Plant Image 3">
+                            </div>
                         </div>
-                        <button class="prev" onclick="changeSlide(-1)">&#10094;</button>
-                        <button class="next" onclick="changeSlide(1)">&#10095;</button>
+                        <button class="arrow right-arrow" onclick="changeSlide(1)">&#10095;</button>
                     </div>
                     <button class="learn-more-btn">
                         Learn More <i class="bi bi-arrow-up-right-circle-fill"></i>
@@ -77,7 +75,7 @@
                 </div>
                 <div class="options">
                     <label>
-                        <input type="radio" name="searchOption" value="chatbot" checked> Ask PlantBot
+                        <input type="radio" name="searchOption" value="site" checked> Search Plants
                     </label>
                     <label>
                         <input type="radio" name="searchOption" value="web"> Search Web
@@ -117,22 +115,22 @@
             const searchOption = document.querySelector('input[name="searchOption"]:checked').value;
             
             if (query.trim() === '') {
-                alert("Please enter a search query");
+                alert('Please enter a search term');
                 return;
             }
 
-            if (searchOption === 'chatbot') {
-                // Store the query in localStorage to be used by chatbot
+            if (searchOption === 'site') {
+                // Store the question in localStorage for the chatbot to pick up
                 localStorage.setItem('pendingQuestion', query);
                 // Redirect to chatbot page
                 window.location.href = '/chatbot';
             } else {
-                // Open web search in new tab
-                window.open(`https://www.google.com/search?q=${encodeURIComponent(query)}+plant`, '_blank');
+                // For web search, open in new tab
+                window.open(`https://www.google.com/search?q=${encodeURIComponent(query)}+medicinal+plant`, '_blank');
             }
         }
 
-        // Handle enter key in search input
+        // Add event listener for Enter key in search input
         document.getElementById("searchInput").addEventListener("keypress", function(event) {
             if (event.key === "Enter") {
                 event.preventDefault();
