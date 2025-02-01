@@ -3,21 +3,31 @@ from flask_cors import CORS
 from werkzeug.utils import secure_filename
 import os
 from dotenv import load_dotenv
-import tensorflow as tf
-import numpy as np
-import google.generativeai as genai
-from PIL import Image
-import random
-from tensorflow.keras.applications.xception import preprocess_input
 import logging
-from info_api import plants_data  # Add this import at the top
-
-# Load environment variables
-load_dotenv()
+import random
+import numpy as np
+from PIL import Image
+import google.generativeai as genai
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+# Initialize variables for TensorFlow components
+tf = None
+preprocess_input = None
+custom_model = None
+
+try:
+    import tensorflow as tf
+    from tensorflow.keras.applications.xception import preprocess_input
+    logger.info("TensorFlow successfully imported")
+except ImportError as e:
+    logger.error(f"Error importing TensorFlow: {str(e)}")
+    logger.warning("Application will run in test mode without TensorFlow")
+
+# Load environment variables
+load_dotenv()
 
 # App configuration
 app = Flask(__name__,
@@ -71,6 +81,10 @@ def configure_advanced_analyzer():
 # Model setup
 def create_model(input_shape=(299, 299, 3), num_classes=80):
     try:
+        if tf is None:
+            logger.error("TensorFlow not available")
+            return None
+            
         base_model = tf.keras.applications.Xception(
             weights='imagenet',
             input_shape=input_shape,
@@ -88,7 +102,7 @@ def create_model(input_shape=(299, 299, 3), num_classes=80):
         return tf.keras.Model(inputs, outputs)
     except Exception as e:
         logger.error(f"Error creating model: {str(e)}")
-        raise
+        return None
 
 # Preprocess image
 def preprocess_image(img_path, target_size=(299, 299)):
