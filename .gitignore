@@ -20,11 +20,6 @@ wheels/
 .installed.cfg
 *.egg
 
-# Virtual Environment
-venv/
-ENV/
-env/
-
 # IDE
 .idea/
 .vscode/
@@ -41,11 +36,21 @@ env/
 # Logs
 *.log
 
-# Model files
-*.h5
-*.pkl
-*.model
-
 # Temporary files
 .DS_Store
-Thumbs.db 
+Thumbs.db
+
+# Model files - only allow in backend/models
+*.h5
+!backend/models/*.h5
+
+# Allow venv but ignore unnecessary files
+venv/*
+!venv/
+!venv/pyvenv.cfg
+!venv/Scripts/
+!venv/Scripts/activate*
+!venv/Scripts/python.exe
+!venv/Scripts/pip.exe
+!venv/Lib/
+!venv/Lib/site-packages/ 

@@ -1,106 +1,75 @@
-# Identification of Medical Plant using Machine Learning
+# Medicinal Plant Identification
 
-A web-based application that uses machine learning to identify medicinal plants from images and provide detailed information about their properties and uses.
-
-## Features
-
-- **Image Upload**: Easy-to-use interface for uploading plant images
-- **Real-time Classification**: Instant identification of medicinal plants
-- **Detailed Information**: Comprehensive details about identified plants including:
-  - Scientific name
-  - Medicinal properties
-  - Traditional uses
-  - Growing conditions
-- **Interactive UI**: Modern and responsive design with smooth animations
-- **Plant Database**: Extensive database of medicinal plants
-
-## Technologies Used
-
-- **Frontend**:
-  - HTML5
-  - CSS3 with modern animations
-  - JavaScript (Vanilla)
-  - Font Awesome icons
-  
-- **Backend**:
-  - Python
-  - Flask web framework
-  - Machine Learning model for plant classification
-  - SQLite database for plant information
-
-## Running in GitHub Codespaces
-
-1. Click the "Code" button on the repository
-2. Select "Create codespace on main"
-3. Wait for the codespace to be created and initialized
-4. Once ready, open a terminal and run:
-```bash
-python app.py
-```
-5. Click the "Open in Browser" button when it appears
-6. The application will open in a new tab
-
-## Local Installation
-
-1. Clone the repository:
-```bash
-git clone https://github.com/pratham0804/Medicinal-Plant-Identification.git
-cd Medicinal-Plant-Identification
-```
-
-2. Create a virtual environment and activate it:
-```bash
-python -m venv venv
-source venv/bin/activate  # On Windows use: venv\Scripts\activate
-```
-
-3. Install the required packages:
-```bash
-pip install -r requirements.txt
-```
-
-4. Run the application:
-```bash
-python app.py
-```
-
-5. Open your browser and navigate to `http://localhost:5000`
+## Recent Updates
+- Improved error handling in both frontend and backend
+- Fixed plant information retrieval using info_api.py
+- Included pre-configured virtual environment for easier setup
+- Enhanced model initialization and error logging
+- Updated project structure for better organization
 
 ## Project Structure
-
 ```
 ├── backend/
-│   ├── __init__.py
-│   ├── model/
-│   └── info_api.py
+│   ├── models/          # Model files
+│   ├── app.py          # Main Flask application
+│   ├── info_api.py     # Plant information data
+│   └── requirements.txt # Backend dependencies
 ├── frontend/
 │   ├── static/
 │   │   ├── css/
 │   │   ├── js/
 │   │   └── images/
 │   └── templates/
-├── app.py
-├── requirements.txt
-└── README.md
+├── venv/               # Pre-configured virtual environment
+└── requirements.txt    # Global dependencies
 ```
 
-## Usage
+## Quick Setup
+1. Clone the repository:
+   ```bash
+   git clone [your-repo-url]
+   cd Medicinal-Plant-Identification
+   ```
 
-1. Open the application in your web browser
-2. Click on the upload button or drag and drop a plant image
-3. Wait for the classification result
-4. View detailed information about the identified medicinal plant
+2. Activate the pre-configured virtual environment:
+   - Windows:
+     ```bash
+     venv\Scripts\activate
+     ```
+   - Linux/Mac:
+     ```bash
+     source venv/bin/activate
+     ```
 
-## Contributing
+3. Start the application:
+   ```bash
+   cd backend
+   python app.py
+   ```
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+4. Access the application at `http://localhost:5000`
 
-## License
+## Features
+- Plant identification from images
+- Detailed plant information and uses
+- Support for multiple image formats (JPG, PNG, WebP)
+- AI-powered plant analysis
+- Mobile-responsive design
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+## Environment Variables
+Create a `.env` file in the backend directory with:
+```
+VISION_API_KEY=your_api_key_here
+```
 
-## Acknowledgments
+## Notes
+- The virtual environment is included for easier setup
+- Model files are stored in backend/models/
+- Supports both TensorFlow and Gemini Vision API for predictions
 
-- Thanks to all contributors who helped in building this project
-- Special thanks to the plant database sources
-- Image dataset contributors
+## Troubleshooting
+If you encounter any issues:
+1. Ensure you're using the included virtual environment
+2. Check if the model file exists in backend/models/
+3. Verify the .env file is properly configured
+4. Check the server logs for detailed error messages

@@ -39,7 +39,9 @@ function handleFileUpload(file) {
   .then(response => {
       debugLog(`Server response status: ${response.status}`);
       if (!response.ok) {
-          throw new Error(`Server returned ${response.status}: ${response.statusText}`);
+          return response.json().then(errData => {
+              throw new Error(errData.error || `Server error: ${response.status}`);
+          });
       }
       return response.json();
   })
@@ -50,24 +52,27 @@ function handleFileUpload(file) {
           throw new Error(data.error);
       }
 
+      if (!data.prediction) {
+          throw new Error('No prediction received from server');
+      }
+
       // Store both prediction and plant info
       try {
           localStorage.setItem('plantPrediction', data.prediction);
-          localStorage.setItem('plantInfo', JSON.stringify(data.plant_info));
+          localStorage.setItem('plantInfo', JSON.stringify(data.plant_info || {}));
           debugLog('Data stored successfully');
 
           // Redirect to results page
           window.location.href = `/predict.html?prediction=${encodeURIComponent(data.prediction)}`;
       } catch (e) {
           debugLog(`Storage error: ${e.message}`);
-          alert('Error saving prediction. Please try again.');
+          throw new Error('Error saving prediction data');
       }
   })
   .catch(error => {
       debugLog(`Error occurred: ${error.message}`);
       alert(`Error: ${error.message}`);
-  })
-  .finally(() => {
+      // Hide loading state on error
       if (loadingElement) loadingElement.style.display = 'none';
   });
 }
