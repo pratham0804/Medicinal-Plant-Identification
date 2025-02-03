@@ -8,7 +8,7 @@ import random
 import numpy as np
 from PIL import Image
 import google.generativeai as genai
-from info_api import plants_data  # Import plants_data from info_api
+from info_api import plants_data  # Add back the missing import
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -39,7 +39,7 @@ CORS(app)
 # Configuration constants
 UPLOAD_FOLDER = os.path.join('..', 'frontend', 'static', 'uploads')
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'webp'}
-MODEL_PATH = os.path.join('models', 'model_avg_25.h5')  # Model inside backend/models
+MODEL_PATH = 'models/model_avg_25.h5'
 
 # Labels list
 labels = ['Aloevera', 'Amla', 'Amruthaballi', 'Arali', 'Astma_weed', 'Badipala', 'Balloon_Vine', 
@@ -62,18 +62,10 @@ os.makedirs(os.path.join('..', 'frontend', 'static', 'images'), exist_ok=True)
 os.makedirs(os.path.join('..', 'frontend', 'static', 'display-images'), exist_ok=True)
 os.makedirs(os.path.join('..', 'frontend', 'static', 'js'), exist_ok=True)
 os.makedirs(os.path.join('..', 'frontend', 'static', 'css'), exist_ok=True)
-os.makedirs('models', exist_ok=True)  # Create models directory inside backend
+os.makedirs('models', exist_ok=True)
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max file size
-
-# Load the plants data at startup
-try:
-    # Use plants_data directly from info_api.py
-    plants_dict = plants_data
-except Exception as e:
-    print(f"Error loading plants data: {e}")
-    plants_dict = {}  # Create empty dict as fallback
 
 # Configure advanced image analysis
 def configure_advanced_analyzer():
@@ -94,7 +86,6 @@ def create_model(input_shape=(299, 299, 3), num_classes=80):
             logger.error("TensorFlow not available")
             return None
             
-        logger.info("Creating model architecture...")    
         base_model = tf.keras.applications.Xception(
             weights='imagenet',
             input_shape=input_shape,
@@ -108,10 +99,8 @@ def create_model(input_shape=(299, 299, 3), num_classes=80):
         x = tf.keras.layers.Dense(128, activation='relu')(x)
         x = tf.keras.layers.Dropout(0.2)(x)
         outputs = tf.keras.layers.Dense(num_classes, activation='softmax')(x)
-        
-        model = tf.keras.Model(inputs, outputs)
-        logger.info("Model architecture created successfully")
-        return model
+
+        return tf.keras.Model(inputs, outputs)
     except Exception as e:
         logger.error(f"Error creating model: {str(e)}")
         return None
@@ -149,43 +138,37 @@ def get_closest_match(plant_description, labels):
 # Enhanced prediction function
 def predict_plant(image_path, custom_model, advanced_analyzer, labels):
     try:
-        logger.info(f"Processing image: {image_path}")
         _, ext = os.path.splitext(image_path)
         ext = ext.lower()
-        logger.info(f"File extension: {ext}")
 
         if ext in ['.webp', '.png']:
-            logger.info("Using advanced image analysis")
+            # Use advanced image analysis with label constraint
             image = Image.open(image_path)
             response = advanced_analyzer.generate_content([
                 "Describe what type of plant or leaf is shown in this image in a few words. If the image is not of a plant, just describe what you see briefly.",
                 image
             ])
             description = response.text.strip()
-            logger.info(f"AI Description: {description}")
             
+            # Get a matching or random label from our predefined list
             selected_label = get_closest_match(description, labels)
-            logger.info(f"Selected label: {selected_label}")
-            return selected_label
+            return selected_label  # Return only the label name without confidence score
 
         elif ext in ['.jpg', '.jpeg']:
-            logger.info("Using custom model for prediction")
+            # Use custom model
             img_array = preprocess_image(image_path)
             predictions = custom_model.predict(img_array)
             max_pred_idx = np.argmax(predictions[0])
             predicted_plant = labels[max_pred_idx]
             confidence_score = float(predictions[0][max_pred_idx]) * 100
-            logger.info(f"Predicted plant: {predicted_plant} with confidence: {confidence_score:.2f}%")
             return f"{predicted_plant} (Confidence: {confidence_score:.2f}%)"
         
         else:
-            logger.error(f"Unsupported file extension: {ext}")
             return "Unsupported image format. Please use .jpg, .jpeg, .png, or .webp formats."
 
     except Exception as e:
         logger.error(f"Error in predict_plant: {str(e)}")
-        import traceback
-        logger.error(f"Traceback: {traceback.format_exc()}")
+        # In case of any error, return a random label
         return random.choice(labels)
 
 def allowed_file(filename):
@@ -202,43 +185,11 @@ def handle_error(error):
 
 # Initialize models
 try:
-    logger.info("Starting model initialization...")
-    
-    # Check if TensorFlow is available
-    if tf is None:
-        raise ImportError("TensorFlow is not properly initialized. Please check if TensorFlow is installed correctly.")
-    
-    # Check if model file exists
-    if not os.path.exists(MODEL_PATH):
-        raise FileNotFoundError(f"Model file not found at {MODEL_PATH}. Please ensure the model file is in the correct location.")
-    
-    # Create model architecture
-    logger.info("Creating model architecture...")
+    logger.info("Loading models...")
     custom_model = create_model()
-    if custom_model is None:
-        raise ValueError("Failed to create model architecture. Check the logs for details.")
-    
-    # Load model weights
-    logger.info(f"Loading model weights from {MODEL_PATH}...")
     custom_model.load_weights(MODEL_PATH)
-    logger.info("Model weights loaded successfully")
-    
-    # Configure advanced analyzer
-    logger.info("Configuring advanced analyzer...")
     advanced_analyzer = configure_advanced_analyzer()
-    if advanced_analyzer is None:
-        raise ValueError("Failed to configure advanced analyzer. Check if VISION_API_KEY is set correctly in .env file.")
-    
-    logger.info("All models initialized successfully!")
-
-except ImportError as e:
-    logger.error(f"Import Error: {str(e)}")
-    custom_model = None
-    advanced_analyzer = None
-except FileNotFoundError as e:
-    logger.error(f"File Error: {str(e)}")
-    custom_model = None
-    advanced_analyzer = None
+    logger.info("Models loaded successfully!")
 except Exception as e:
     logger.error(f"Error initializing models: {str(e)}")
     custom_model = None
@@ -255,8 +206,8 @@ def predict_page():
     # Extract plant name without confidence score
     plant_name = prediction.split(' (')[0] if ' (' in prediction else prediction
     
-    # Get plant information from plants_dict
-    plant_info = plants_dict.get(plant_name, {
+    # Get plant information from plants_data
+    plant_info = plants_data.get(plant_name, {
         'description': 'Information not available.',
         'uses': 'Information not available.',
         'applications': 'Information not available.',
@@ -271,64 +222,48 @@ def predict_page():
                          plant_info=plant_info,
                          plant_images=plant_images)
 
-@app.route('/predict', methods=['POST', 'GET'])
+@app.route('/predict', methods=['POST'])
 def predict():
-    if request.method == 'GET':
-        return redirect(url_for('home'))
-        
-    # Handle POST request
-    logger.info("Received POST request to /predict")
-    
-    if custom_model is None:
-        logger.error("Custom model is not initialized")
+    if custom_model is None or advanced_analyzer is None:
         return jsonify({
-            'error': 'Custom model not initialized. Please check server logs.'
-        }), 500
-        
-    if advanced_analyzer is None:
-        logger.error("Advanced analyzer is not initialized")
-        return jsonify({
-            'error': 'Advanced analyzer not initialized. Please check server logs.'
+            'error': 'Models not properly initialized. Please check server logs.'
         }), 500
 
     if 'file' not in request.files:
-        logger.error("No file part in request")
         return jsonify({'error': 'No file part'}), 400
     
     file = request.files['file']
-    logger.info(f"Received file: {file.filename}")
     
     if file.filename == '':
-        logger.error("No selected file")
         return jsonify({'error': 'No selected file'}), 400
     
     if file and allowed_file(file.filename):
         try:
             filename = secure_filename(file.filename)
             filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-            logger.info(f"Saving file to: {filepath}")
             
             # Save the file
             file.save(filepath)
-            logger.info("File saved successfully")
             
             # Make prediction
-            logger.info("Starting prediction")
             result = predict_plant(filepath, custom_model, advanced_analyzer, labels)
-            logger.info(f"Prediction result: {result}")
             
             # Get plant name without confidence score
             plant_name = result.split(' (')[0] if ' (' in result else result
             
-            # Get plant information from plants_dict
-            plant_info = plants_dict.get(plant_name, {
+            # Get plant information from plants_data with default values
+            default_info = {
                 'description': 'Information not available.',
                 'uses': 'Information not available.',
                 'applications': 'Information not available.',
                 'cons': 'Information not available.'
-            })
+            }
             
-            logger.info(f"Returning prediction: {plant_name}")
+            # Try to get plant info, use default if not found
+            plant_info = plants_data.get(plant_name, default_info)
+            
+            logger.info(f"Prediction successful: {plant_name}")
+            
             return jsonify({
                 'prediction': plant_name,
                 'plant_info': plant_info
@@ -336,20 +271,19 @@ def predict():
         
         except Exception as e:
             logger.error(f"Error processing upload: {str(e)}")
-            import traceback
-            logger.error(f"Traceback: {traceback.format_exc()}")
-            return jsonify({'error': f'Error processing image: {str(e)}'}), 500
+            return jsonify({
+                'error': f'Error processing image: {str(e)}',
+                'details': 'Please try again with a different image.'
+            }), 500
         
         finally:
             # Clean up the uploaded file
             if os.path.exists(filepath):
                 try:
                     os.remove(filepath)
-                    logger.info("Temporary file removed")
                 except Exception as e:
                     logger.error(f"Error removing temporary file: {str(e)}")
     
-    logger.error("Invalid file type")
     return jsonify({'error': 'Invalid file type'}), 400
 
 # Static file handlers
@@ -432,16 +366,6 @@ def chat():
         logger.error(f"Error in chat endpoint: {str(e)}")
         return jsonify({
             'error': 'An error occurred while processing your request'
-        }), 500
-
-@app.route('/api/plants', methods=['GET'])
-def get_plants():
-    try:
-        return jsonify(plants_data.to_dict('records'))
-    except Exception as e:
-        return jsonify({
-            "error": str(e),
-            "message": "Error fetching plants data"
         }), 500
 
 if __name__ == '__main__':
