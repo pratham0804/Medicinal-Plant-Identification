@@ -8,7 +8,8 @@ import random
 import numpy as np
 from PIL import Image
 import google.generativeai as genai
-from info_api import plants_data  # Add back the missing import
+from backend.info_api import plants_data
+
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
