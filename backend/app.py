@@ -8,7 +8,7 @@ import random
 import numpy as np
 from PIL import Image
 import google.generativeai as genai
-from backend.info_api import plants_data
+from info_api import plants_data
 
 
 # Configure logging
