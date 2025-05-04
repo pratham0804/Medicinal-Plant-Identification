@@ -1,6 +1,6 @@
 # Medicinal Plant Identification
 
-This project uses machine learning to identify medicinal plants from images. It supports both JPEG/JPG formats (using a TensorFlow model) and other image formats (using Vision API).
+This project uses machine learning to identify medicinal plants from images. It supports both JPEG/JPG formats (using a TensorFlow model) and other image formats.
 
 ## Prerequisites
 
